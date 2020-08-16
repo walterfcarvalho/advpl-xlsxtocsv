@@ -47,7 +47,7 @@ Static Function Converter(cArq, oProcess)
 
     // Valida se o arquivo informado existe
     If File(cArq,/*nWhere*/,.T.) = .F.
-        ApMsgSTop("Arquivo n„o encontrado:" + cArq, cMsgHead)
+        ApMsgSTop("Arquivo n√£o encontrado:" + cArq, cMsgHead)
         Return aRes
     EndIf
 
@@ -60,7 +60,7 @@ Static Function Converter(cArq, oProcess)
     // Pega do servidor o arquivo que vai converter o xlsx  para csv
     If File( GetClientDir() + cExe ) = .F.
         If CpyS2T("\system\xlsxtocsv.exe", GetClientDir(), .F., .F.) = .F.
-            ApMsgSTop('N„o foi possÌvel pegar o conversor no servidor, em "\system\"' + cExe, cMsgHead)
+            ApMsgSTop('N√£o foi poss√≠vel pegar o conversor no servidor, em "\system\"' + cExe, cMsgHead)
             Return aRes
         EndIf
 
@@ -69,13 +69,13 @@ Static Function Converter(cArq, oProcess)
     oProcess:IncRegua1("2/4 Arq CSV temporario")
     oProcess:SetRegua2(10)
 
-    nShell := Shellexecute('open', '"' + GetClientDir() + cExe + '"', '"' + Alltrim(cArq) + '"', GetClientDir(), 2)
+    nShell := Shellexecute('open', '"' + GetClientDir() + cExe + '"', '"' + Alltrim(cArq) + '"', GetClientDir(), 0)
 
     While File(cArqCsv) = .F.
         oProcess:IncRegua2("Convertendo arquivo...")
 
         If nShell = -1 .Or. nShell = 2
-            ApMsgSTop("N„o foi possivel efetuar a convers„o do arquivo." + cArq, xlsxToArr())
+            ApMsgSTop("N√£o foi possivel efetuar a convers√£o do arquivo." + cArq, xlsxToArr())
             Return aRes
         Else    
             Sleep(1000)
@@ -85,7 +85,7 @@ Static Function Converter(cArq, oProcess)
 
     nHandle := FT_FUse(cArqCsv)
     If nHandle < 0
-        ApMsgSTop("N„o foi possÌvel ler o arquivo CSV." + cArq, cMsgHead)
+        ApMsgSTop("N√£o foi poss√≠vel ler o arquivo CSV." + cArq, cMsgHead)
         Return aRes
     EndIf
 
