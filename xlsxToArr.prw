@@ -18,9 +18,9 @@ User function xlsxToArr(cArq)
     
     lEnd      := .F.
 
-	oProcess := MsNewProcess():New({|lEnd| aRes:= Converter(cArq, @oProcess)  },"Extraindo dados da planilha XLSX","Efetuando a leitura do arquivo xlsx...", .F.)
+    oProcess := MsNewProcess():New({|lEnd| aRes:= Converter(cArq, @oProcess)  },"Extraindo dados da planilha XLSX","Efetuando a leitura do arquivo xlsx...", .F.)
 
-	oProcess:Activate()
+oProcess:Activate()
 
 Return aRes
 
