@@ -16,15 +16,15 @@ User function xlsxToArr(cArq)
     Local aRes      := nil
     Local lEnd      := .F.
     
-    lEnd      := .F.
+    lEnd      := .T.
 
-    oProcess := MsNewProcess():New({|lEnd| aRes:= Converter(cArq, @oProcess)  },"Extraindo dados da planilha XLSX","Efetuando a leitura do arquivo xlsx...", .F.)
+	oProcess := MsNewProcess():New({|lEnd| aRes:= Converter(cArq, @oProcess, @lEnd)  },"Extraindo dados da planilha XLSX","Efetuando a leitura do arquivo xlsx...", .T.)
 
-oProcess:Activate()
+	oProcess:Activate()
 
 Return aRes
 
-Static Function Converter(cArq, oProcess)
+Static Function Converter(cArq, oProcess, lEnd)
     Local nReg      := 0    
     Local nShell    := 0
     Local cMsgHead  := "xlsxToArr()"
@@ -47,7 +47,7 @@ Static Function Converter(cArq, oProcess)
 
     // Valida se o arquivo informado existe
     If File(cArq,/*nWhere*/,.T.) = .F.
-        ApMsgSTop("Arquivo n√£o encontrado:" + cArq, cMsgHead)
+        ApMsgSTop("Arquivo n„o encontrado:" + cArq, cMsgHead)
         Return aRes
     EndIf
 
@@ -60,14 +60,14 @@ Static Function Converter(cArq, oProcess)
     // Pega do servidor o arquivo que vai converter o xlsx  para csv
     If File( GetClientDir() + cExe ) = .F.
         If CpyS2T("\system\xlsxtocsv.exe", GetClientDir(), .F., .F.) = .F.
-            ApMsgSTop('N√£o foi poss√≠vel pegar o conversor no servidor, em "\system\"' + cExe, cMsgHead)
+            ApMsgSTop('N„o foi possÌvel pegar o conversor no servidor, em "\system\"' + cExe, cMsgHead)
             Return aRes
         EndIf
 
     EndIf
 
     oProcess:IncRegua1("2/4 Arq CSV temporario")
-    oProcess:SetRegua2(10)
+    oProcess:SetRegua2(20)
 
     nShell := Shellexecute('open', '"' + GetClientDir() + cExe + '"', '"' + Alltrim(cArq) + '"', GetClientDir(), 0)
 
@@ -75,7 +75,7 @@ Static Function Converter(cArq, oProcess)
         oProcess:IncRegua2("Convertendo arquivo...")
 
         If nShell = -1 .Or. nShell = 2
-            ApMsgSTop("N√£o foi possivel efetuar a convers√£o do arquivo." + cArq, xlsxToArr())
+            ApMsgSTop("N„o foi possivel efetuar a convers„o do arquivo." + cArq, xlsxToArr())
             Return aRes
         Else    
             Sleep(1000)
@@ -85,8 +85,13 @@ Static Function Converter(cArq, oProcess)
 
     nHandle := FT_FUse(cArqCsv)
     If nHandle < 0
-        ApMsgSTop("N√£o foi poss√≠vel ler o arquivo CSV." + cArq, cMsgHead)
+        ApMsgSTop("N„o foi possÌvel ler o arquivo CSV." + cArq, cMsgHead)
         Return aRes
+    EndIf
+
+    if lEnd = .T.   //VERIFICAR SE N√O CLICOU NO BOTAO CANCELAR
+        ApMsgSTop("Processo cancelado pelo usu·rio." + cArq, cMsgHead)
+        Return {}
     EndIf
 
 
@@ -97,12 +102,20 @@ Static Function Converter(cArq, oProcess)
     FT_FGoTop()
 
     While !FT_FEOF()
+        if lEnd = .T.    //VERIFICAR SE N√O CLICOU NO BOTAO CANCELAR
+            ApMsgSTop("Processo cancelado pelo usu·rio." + cArq, cMsgHead)
+            Return {}
+        EndIf
+
         nReg += 1
         oProcess:IncRegua2("Lendo registro " + CvalToChar(nReg) + " de " + cValToCHar(FT_FLastRec()) )
 
         cLinha  := FT_FReadLn()
 
         If Empty(cLinha) = .F.    
+
+            
+
             Aadd( aRes, Separa(cLinha, ",", .F.))
         EndIf            
 
@@ -122,3 +135,4 @@ Static Function Converter(cArq, oProcess)
     FErase(cArqTmp)
 
 Return aRes
+
