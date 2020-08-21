@@ -18,7 +18,7 @@ Basta colocar o executável xlsxToCsv.exe na pasta system
 E compilar o fonte xlsxToArr.prw  no seu projeto ;)
 
 # Como funciona?
-Após a compilação use u_xlsxToArr() com dois parâmetros
+Após a deploy use u_xlsxToArr() com dois parâmetros
 
 cArq: nome do arquivo XLSX ou XLS. Se não for passado, então a função abre uma janela para escolher o arquivo.
 
