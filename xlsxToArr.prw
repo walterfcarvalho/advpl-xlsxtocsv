@@ -18,11 +18,9 @@ User function xlsxToArr(cArq, cIdPlan)
     Local aRes      := nil
     Local lEnd      := .F.
     
-    Default cIdPlan :=  "1"
+    Default cIdPlan := "1"
     Default cArq    := ""
     
-    lEnd      := .T.
-
 	oProcess := MsNewProcess():New({|lEnd| aRes:= Converter(cArq, cIdPlan, @oProcess, @lEnd)  },"Extraindo dados da planilha XLSX","Efetuando a leitura do arquivo xlsx...", .T.)
 
 	oProcess:Activate()
@@ -44,21 +42,21 @@ Static Function Converter(cArq, cIdPlan, oProcess, lEnd)
 
     // Se nao enviar cArq, abre dialogo para escolher o arquivo
     If Empty(cArq) = .T.
-        cArq := cGetFile( "Arquivos Excel|*.xlsx", "Informe o Arquivo XLSX",  1, cDirIni, .F., GETF_LOCALHARD, .F., .T. )
+        cArq := cGetFile( "Arquivos Excel|*.xls", "Selecione o arquivo:",  1, cDirIni, .F., GETF_LOCALHARD, .F., .T. )
 
         If Empty(cArq)
-        ApMsgSTop("Importacao Cancelada:", cMsgHead)
+        ApMsgStop("Importacao Cancelada:", cMsgHead)
             Return aRes
         EndIf
     EndIf
 
     // Gere o nome do arquivo CSV temporario
-    cArqCsv := SubStr(cArq, 1, Len(cArq) -4 ) + "csv"
-    cArqTmp := SubStr(cArq, 1, Len(cArq) -4 ) + "tmp"
+    cArqCsv := SubStr(cArq, 1, Rat(".", cArq) ) + "csv"
+    cArqTmp := SubStr(cArq, 1, Rat(".", cArq) ) + "tmp"
 
     // Valida se o arquivo informado existe
     If File(cArq,/*nWhere*/,.T.) = .F.
-        ApMsgSTop("Arquivo não encontrado:" + cArq, cMsgHead)
+        ApMsgStop("Arquivo não encontrado:" + cArq, cMsgHead)
         Return aRes
     EndIf
 
@@ -71,7 +69,7 @@ Static Function Converter(cArq, cIdPlan, oProcess, lEnd)
     // Pega do servidor o arquivo que vai converter o xlsx  para csv
     If File( GetClientDir() + cExe ) = .F.
         If CpyS2T("\system\xlsxtocsv.exe", GetClientDir(), .F., .F.) = .F.
-            ApMsgSTop('Não foi possível pegar o conversor no servidor, em "\system\"' + cExe, cMsgHead)
+            ApMsgStop('Não foi possível baixar o conversor do servidor, em "\system\"' + cExe, cMsgHead)
             Return aRes
         EndIf
 
@@ -85,16 +83,20 @@ Static Function Converter(cArq, cIdPlan, oProcess, lEnd)
     While File(cArqCsv) = .F.
         nPassos += 1
 
+        if lEnd = .T.    //VERIFICAR SE NÃO CLICOU NO BOTAO CANCELAR
+            ApMsgStop("Processo cancelado pelo usuário." + cArq, cMsgHead)
+            Return aRes
+        EndIf
+
         If nPassos = 50
-            ApMsgSTop("A conversão excedeu o tempo limite para o arquivo" + cArq, cMsgHead)
-            Return {}
+            ApMsgStop("A conversão excedeu o tempo limite para o arquivo" + cArq, cMsgHead)
+            Return aRes
         EndIf
 
         oProcess:IncRegua2("Convertendo arquivo...")
 
-
         If nShell = -1 .Or. nShell = 2
-            ApMsgSTop("Não foi possível efetuar a conversão do arquivo." + cArq, cMsgHead)
+            ApMsgStop("Não foi possível efetuar a conversão do arquivo." + cArq, cMsgHead)
             Return aRes
         Else    
             Sleep(1000)
@@ -104,13 +106,13 @@ Static Function Converter(cArq, cIdPlan, oProcess, lEnd)
 
     nHandle := FT_FUse(cArqCsv)
     If nHandle < 0
-        ApMsgSTop("Não foi possível ler o arquivo CSV." + cArq, cMsgHead)
+        ApMsgStop("Não foi possível ler o arquivo CSV." + cArq, cMsgHead)
         Return aRes
     EndIf
 
     if lEnd = .T.   //VERIFICAR SE NÃO CLICOU NO BOTAO CANCELAR
-        ApMsgSTop("Processo cancelado pelo usuário." + cArq, cMsgHead)
-        Return {}
+        ApMsgStop("Processo cancelado pelo usuário." + cArq, cMsgHead)
+        Return aRes
     EndIf
 
 
@@ -123,7 +125,7 @@ Static Function Converter(cArq, cIdPlan, oProcess, lEnd)
     While !Ft_Feof()
 
         if lEnd = .T.    //VERIFICAR SE NÃO CLICOU NO BOTAO CANCELAR
-            ApMsgSTop("Processo cancelado pelo usuário." + cArq, cMsgHead)
+            ApMsgStop("Processo cancelado pelo usuário." + cArq, cMsgHead)
             Return {}
         EndIf
 
