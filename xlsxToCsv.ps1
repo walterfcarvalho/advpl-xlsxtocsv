@@ -6,14 +6,13 @@
     }
    
     #pega o diretorio
-    $dir = ( Get-Item $args[0] ).DirectoryName
+    #$dir = ( Get-Item $args[0] ).DirectoryName
     
     #pega o nome base do arquivo
     $fileBase = (Get-Item $args[0] ).BaseName
 
     #define o nome do arquivo de saida
-    $outFile = "$dir\$fileBase.tmp"
-
+    $outFile = "$env:TEMP\$fileBase.tmp"
 
     #deletar o arquivo tmp, se existir
     if( Test-Path $outFile ){
@@ -47,4 +46,4 @@
     [System.Runtime.Interopservices.Marshal]::ReleaseComObject($Excel)
     spps -n Excel
 
-    Rename-Item $outFile "$dir\$fileBase.csv"
+    Rename-Item $outFile "$env:TEMP\$fileBase.csv"
