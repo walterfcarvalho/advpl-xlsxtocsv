@@ -40,6 +40,12 @@ Static Function Converter(cArq, cIdPlan, oProcess, lEnd)
     Local cArqCsv   := ""
     Local cArqTmp   := ""
 
+    //Testar se existe excel instalado na maquina
+     If ApOleClient("MsExcel") = .F.
+        ApMsgStop("Não detectei excel instalado na máquina:", cMsgHead)
+        Return aRes
+    EndIf
+    
     // Se nao enviar cArq, abre dialogo para escolher o arquivo
     If Empty(cArq) = .T.
         cArq := cGetFile( "Arquivos Excel|*.xlsx|Arquivos Excel 97|*.xls", "Selecione o arquivo:",  1, cDirIni, .F., GETF_LOCALHARD, .F., .T. )
