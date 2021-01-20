@@ -1,4 +1,4 @@
-    #pegar o idx da planilha se for passado o parametro, sen„o pega a primeira
+    #pegar o idx da planilha se for passado o parametro, sen√£o pega a primeira
     if ( $args[1] ){
         $nPlanilha = [int]$args[1]
     } Else {
@@ -40,7 +40,7 @@
 
 	$workSheet = $wb.Sheets.Item($nPlanilha);
     
-	$workSheet.SaveAs($outFile, 06)
+	$workSheet.SaveAs($outFile, 6, 0, 0, 0, 0, 0, 0, 0, $args[2] )
 
     $Excel.Quit()
     [System.Runtime.Interopservices.Marshal]::ReleaseComObject($Excel)
