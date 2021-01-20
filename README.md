@@ -22,7 +22,9 @@ Após a deploy use u_xlsxToArr() com dois parâmetros
 
 cArq: nome do arquivo XLSX ou XLS. Se não for passado, então a função abre uma janela para escolher o arquivo.
 
-cId: id da planilha no arquivo, se não for informado, será considerada a primeira planilha.  
+cId: id da planilha no arquivo. Se não for informado, será considerada a primeira planilha.  
+
+cSeparator: Permite separar os campos do CSV com ',' ou ";". Se não for informado cria o arquivo separado por ','.
 
 
 
