@@ -1,12 +1,18 @@
+    #pegar o idx da planilha se for passado o parametro, senão pega a primeira
+    if ( $args[1] ){
+        $nPlanilha = [int]$args[1]
+    } Else {
+        $nPlanilha = 1
+    }
+
     #pega o diretorio
-    $dir = ( Get-Item $args[0] ).DirectoryName
+    #$dir = ( Get-Item $args[0] ).DirectoryName
     
     #pega o nome base do arquivo
     $fileBase = (Get-Item $args[0] ).BaseName
 
     #define o nome do arquivo de saida
-    $outFile = "$dir\$fileBase.tmp"
-
+    $outFile = "$env:TEMP\$fileBase.tmp"
 
     #deletar o arquivo tmp, se existir
     if( Test-Path $outFile ){
@@ -14,10 +20,9 @@
     } 
     
     #deletar o arquivo csv, se existir
-    if( Test-Path "$dir\$fileBase.csv" ){
-        Remove-Item "$dir\$fileBase.csv"     
+    if( Test-Path "$env:TEMP\$fileBase.csv" ){
+        Remove-Item "$env:TEMP\$fileBase.csv"    
     } 
-
 
 
     #operacoes com o excel
@@ -33,14 +38,20 @@
     
     $wb = $Excel.Workbooks.Open($excelFile)
 
-	$workSheet = $wb.Sheets.Item(1);
-
+	$workSheet = $wb.Sheets.Item($nPlanilha);
     
-	$workSheet.SaveAs($outFile, 06)
+    #salva no formato csv
+	$workSheet.SaveAs($outFile, 6)
 
     $Excel.Quit()
     [System.Runtime.Interopservices.Marshal]::ReleaseComObject($Excel)
     spps -n Excel
 
+    #reprocessa com o delimitador escolhido
+    Import-Csv $outFile | Export-Csv "$env:TEMP\$fileBase.csv" -Delimiter $args[2] -NoTypeInformation
 
-    Rename-Item $outFile "$dir\$fileBase.csv"
+    #deletar o arquivo tmp, se existir
+    if( Test-Path $outFile ){
+        Remove-Item $outFile     
+    } 
+    
