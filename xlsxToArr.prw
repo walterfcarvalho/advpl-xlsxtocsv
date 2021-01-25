@@ -1,4 +1,4 @@
-//-------------------------------------------------------------------
+﻿//-------------------------------------------------------------------
 /*/{Protheus.doc}
 
 @description    Efetua a conversao para csv da primeira planilha passada como parametro
@@ -13,21 +13,22 @@
 #INCLUDE 'TOTVS.CH'
 
 
-User function xlsxToArr(cArq, cIdPlan)
+User function xlsxToArr(cArq, cIdPlan, cDelimiter)
     Local oProcess  := nil
     Local aRes      := nil
     Local lEnd      := .F.
 
     Default cIdPlan := "1"
     Default cArq    := ""
+    Default cDelimiter := ","
 
-    oProcess := MsNewProcess():New({|lEnd| aRes:= Converter(cArq, cIdPlan, @oProcess, @lEnd)  },"Extraindo dados da planilha XLSX","Efetuando a leitura do arquivo xlsx...", .T.)
+    oProcess := MsNewProcess():New({|lEnd| aRes:= Converter(cArq, cIdPlan, cDelimiter, @oProcess, @lEnd)  },"Extraindo dados da planilha XLSX","Efetuando a leitura do arquivo xlsx...", .T.)
 
     oProcess:Activate()
 
 Return aRes
 
-Static Function Converter(cArq, cIdPlan, oProcess, lEnd)
+Static Function Converter(cArq, cIdPlan, cDelimiter, oProcess, lEnd)
     Local i         := 1
     Local aLines    := {}
     Local oFile     := Nil
@@ -39,6 +40,11 @@ Static Function Converter(cArq, cIdPlan, oProcess, lEnd)
     Local cExe      := "xlsxToCsv.exe"
     Local cArqCsv   := ""
     Local cArqTmp   := ""
+
+    //setar o delimitador  
+    If cDelimiter <> ";"
+       cDelimiter := ","		
+    EndIf
 
     //Testar se existe excel instalado na maquina
      If ApOleClient("MsExcel") = .F.
@@ -84,7 +90,7 @@ Static Function Converter(cArq, cIdPlan, oProcess, lEnd)
     oProcess:IncRegua1("2/4 Arq CSV temporario")
     oProcess:SetRegua2(20)
 
-    nShell := Shellexecute('open', '"' + GetClientDir() + cExe + '"', '"' + Alltrim(cArq) + '" "' + cIdPlan + '" ' , GetClientDir(), 0)
+    nShell := Shellexecute('open', '"' + GetClientDir() + cExe + '"', '"' + Alltrim(cArq) + '" "' + cIdPlan + '" "' + cDelimiter + '" ' , GetClientDir(), 0)
 
     While File(cArqCsv) = .F.
         nPassos += 1
