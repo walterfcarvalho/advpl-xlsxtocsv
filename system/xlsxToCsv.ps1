@@ -1,4 +1,4 @@
-    #pegar o idx da planilha se for passado o parametro, sen√£o pega a primeira
+    #pegar o idx da planilha se for passado o parametro, sen„o pega a primeira
     if ( $args[1] ){
         $nPlanilha = [int]$args[1]
     } Else {
@@ -46,6 +46,9 @@
     $Excel.Quit()
     [System.Runtime.Interopservices.Marshal]::ReleaseComObject($Excel)
     spps -n Excel
+
+    ECHO "$env:TEMP\$fileBase.csv"
+    ECHO $outFile
 
     #reprocessa com o delimitador escolhido
     Import-Csv $outFile | Export-Csv "$env:TEMP\$fileBase.csv" -Delimiter $args[2] -NoTypeInformation
