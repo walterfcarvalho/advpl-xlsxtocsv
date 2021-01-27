@@ -1,4 +1,4 @@
-Ôªø//-------------------------------------------------------------------
+//-------------------------------------------------------------------
 /*/{Protheus.doc}
 
 @description    Efetua a conversao para csv da primeira planilha passada como parametro
@@ -48,7 +48,7 @@ Static Function Converter(cArq, cIdPlan, cDelimiter, oProcess, lEnd)
 
     //Testar se existe excel instalado na maquina
      If ApOleClient("MsExcel") = .F.
-        ApMsgStop("N√£o detectei excel instalado na m√°quina:", cMsgHead)
+        ApMsgStop("N„o detectei excel instalado na m·quina:", cMsgHead)
         Return aRes
     EndIf
     
@@ -68,7 +68,7 @@ Static Function Converter(cArq, cIdPlan, cDelimiter, oProcess, lEnd)
 
     // Valida se o arquivo informado existe
     If File(cArq,/*nWhere*/,.T.) = .F.
-        ApMsgStop("Arquivo n√£o encontrado:" + cArq, cMsgHead)
+        ApMsgStop("Arquivo n„o encontrado:" + cArq, cMsgHead)
         Return aRes
     EndIf
 
@@ -81,7 +81,7 @@ Static Function Converter(cArq, cIdPlan, cDelimiter, oProcess, lEnd)
     // Pega do servidor o arquivo que vai converter o xlsx  para csv
     If File( GetClientDir() + cExe ) = .F.
         If CpyS2T("\system\xlsxtocsv.exe", GetClientDir(), .F., .F.) = .F.
-            ApMsgStop('N√£o foi poss√≠vel baixar o conversor do servidor, em "\system\"' + cExe, cMsgHead)
+            ApMsgStop('N„o foi possÌvel baixar o conversor do servidor, em "\system\"' + cExe, cMsgHead)
             Return aRes
         EndIf
 
@@ -95,20 +95,20 @@ Static Function Converter(cArq, cIdPlan, cDelimiter, oProcess, lEnd)
     While File(cArqCsv) = .F.
         nPassos += 1
 
-        if lEnd = .T.    //VERIFICAR SE N√ÉO CLICOU NO BOTAO CANCELAR
-            ApMsgStop("Processo cancelado pelo usu√°rio." + cArq, cMsgHead)
+        if lEnd = .T.    //VERIFICAR SE N√O CLICOU NO BOTAO CANCELAR
+            ApMsgStop("Processo cancelado pelo usu·rio." + cArq, cMsgHead)
             Return aRes
         EndIf
 
         If nPassos = 50
-            ApMsgStop("A convers√£o excedeu o tempo limite para o arquivo" + cArq, cMsgHead)
+            ApMsgStop("A convers„o excedeu o tempo limite para o arquivo" + cArq, cMsgHead)
             Return aRes
         EndIf
 
         oProcess:IncRegua2("Convertendo arquivo...")
 
         If nShell = -1 .Or. nShell = 2
-            ApMsgStop("N√£o foi poss√≠vel efetuar a convers√£o do arquivo." + cArq, cMsgHead)
+            ApMsgStop("N„o foi possÌvel efetuar a convers„o do arquivo." + cArq, cMsgHead)
             Return aRes
         Else
             Sleep(1000)
@@ -119,14 +119,14 @@ Static Function Converter(cArq, cIdPlan, cDelimiter, oProcess, lEnd)
     oFile := FWFileReader():New(cArqCsv)
 
     If oFile:Open() = .F.
-        ApMsgStop("N√£o foi poss√≠vel efetuar a leitura do arquivo." + cArq, cMsgHead)
+        ApMsgStop("N„o foi possÌvel efetuar a leitura do arquivo." + cArq, cMsgHead)
         Return aRes
     EndIf
 
     aLines := oFile:GetAllLines()
 
-    if lEnd = .T.   //VERIFICAR SE N√ÉO CLICOU NO BOTAO CANCELAR
-        ApMsgStop("Processo cancelado pelo usu√°rio." + cArq, cMsgHead)
+    if lEnd = .T.   //VERIFICAR SE N√O CLICOU NO BOTAO CANCELAR
+        ApMsgStop("Processo cancelado pelo usu·rio." + cArq, cMsgHead)
         Return aRes
     EndIf
 
@@ -136,8 +136,8 @@ Static Function Converter(cArq, cIdPlan, cDelimiter, oProcess, lEnd)
 
     For i:=1 to len(aLines)
 
-        if lEnd = .T.    //VERIFICAR SE N√ÉO CLICOU NO BOTAO CANCELAR
-            ApMsgStop("Processo cancelado pelo usu√°rio." + cArq, cMsgHead)
+        if lEnd = .T.    //VERIFICAR SE N√O CLICOU NO BOTAO CANCELAR
+            ApMsgStop("Processo cancelado pelo usu·rio." + cArq, cMsgHead)
             Return {}
         EndIf
 
