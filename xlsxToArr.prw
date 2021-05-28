@@ -40,6 +40,8 @@ Static Function Converter(cArq, cIdPlan, cDelimiter, oProcess, lEnd)
     Local cExe      := "xlsxToCsv.exe"
     Local cArqCsv   := ""
     Local cArqTmp   := ""
+    Local aLinha    := {}
+    Local lManterVazio := .T.  
 
     //setar o delimitador  
     If cDelimiter <> ";"
@@ -63,8 +65,13 @@ Static Function Converter(cArq, cIdPlan, cDelimiter, oProcess, lEnd)
     EndIf
 
     // Gere o nome do arquivo CSV temporario
-    cArqCsv := GetTempPath() + RetFileName(cArq) + ".csv"
-    cArqTmp := GetTempPath() + RetFileName(cArq) + ".tmp"
+    //cArqCsv := GetTempPath() + RetFileName(cArq) + ".csv"   // zArqSemExt(cArq) + "csv"
+    //cArqTmp := GetTempPath() + RetFileName(cArq) + ".tmp"  // zArqSemExt(cArq) + "tmp"
+    cArqCsv := GetTempPath() + zArqSemExt(cArq) + ".csv"
+    cArqTmp := GetTempPath() + zArqSemExt(cArq) + ".tmp"
+
+    FErase(cArqCsv)
+    FErase(cArqTmp)
 
     // Valida se o arquivo informado existe
     If File(cArq,/*nWhere*/,.T.) = .F.
@@ -79,13 +86,11 @@ Static Function Converter(cArq, cIdPlan, cDelimiter, oProcess, lEnd)
     oProcess:IncRegua2("")
 
     // Pega do servidor o arquivo que vai converter o xlsx  para csv
-    If File( GetClientDir() + cExe ) = .F.
-        If CpyS2T("\system\xlsxtocsv.exe", GetClientDir(), .F., .F.) = .F.
-            ApMsgStop('Não foi possível baixar o conversor do servidor, em "\system\"' + cExe, cMsgHead)
-            Return aRes
-        EndIf
-
+    If CpyS2T("\system\xlsxtocsv.exe", GetClientDir(), .F., .F.) = .F.
+        ApMsgStop('Não foi possível baixar o conversor do servidor, em "\system\"' + cExe, cMsgHead)
+        Return aRes
     EndIf
+
 
     oProcess:IncRegua1("2/4 Arq CSV temporario")
     oProcess:SetRegua2(20)
@@ -146,7 +151,13 @@ Static Function Converter(cArq, cIdPlan, cDelimiter, oProcess, lEnd)
         cLinha  := aLines[i]
 
         If Empty(cLinha) = .F.
-            Aadd( aRes, Separa(cLinha, ",", .F.))
+            cLinha := StrTran(cLinha, '"', '')
+
+            aLinha := Separa(cLinha, ",", lManterVazio)
+
+            If Len(aLinha) > 0
+                Aadd( aRes, aLinha )
+            EndIf    
         EndIf
     Next
 
@@ -160,3 +171,26 @@ Static Function Converter(cArq, cIdPlan, cDelimiter, oProcess, lEnd)
     FErase(cArqTmp)
 
 Return aRes
+
+ Static Function zArqSemExt(cArq)
+    Local i          := 1
+    Local nPosPonto  := 1
+    Local nPosBarra  := 1
+//    Local cRes       := ""
+
+    For i:= Len(cArq) to 1 step -1
+        if Substr(cArq, i) = "."
+            nPosPonto := i
+            Exit
+        EndIf
+    Next
+
+    For i:= Len(cArq) to 1 step -1
+        if Substr(cArq, i) = "\"
+            nPosBarra := i
+            Exit
+        EndIf
+    Next    
+
+Return  Substr(cArq, nPosBarra + 1,    nPosPonto - nPosBarra -1  )
+
