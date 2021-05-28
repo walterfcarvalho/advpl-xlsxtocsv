@@ -9,9 +9,6 @@
     } Else {
         $nPlanilha = 1
     }
-
-    #pega o diretorio
-    #$dir = ( Get-Item $args[0] ).DirectoryName
     
     #pega o nome base do arquivo
     $fileBase = (Get-Item $args[0] ).BaseName
@@ -28,7 +25,6 @@
     if( Test-Path "$env:TEMP\$fileBase.csv" ){
         Remove-Item "$env:TEMP\$fileBase.csv"    
     } 
-
 
     #operacoes com o excel
     $Excel = New-Object -ComObject Excel.Application
@@ -56,12 +52,12 @@
 
     #spps -n Excel
 
-
     ECHO "$env:TEMP\$fileBase.csv"
     ECHO $outFile
 
-    #reprocessa com o delimitador escolhido
-    Import-Csv $outFile | Export-Csv "$env:TEMP\$fileBase.csv" -Delimiter $args[2] -NoTypeInformation
+    # renomeia o tmp para csv
+    # isso é necessario se a conversao demorar
+    Rename-Item $outFile "$env:TEMP\$fileBase.csv"
 
     #deletar o arquivo tmp, se existir
     if( Test-Path $outFile ){
