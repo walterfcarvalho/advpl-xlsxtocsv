@@ -1,3 +1,4 @@
+
 # advpl-xlsxtocsv
 Projeto com a classe conversora de xlsx para csv
 
@@ -26,5 +27,14 @@ cId: id da planilha no arquivo. Se não for informado, será considerada a prime
 
 cSeparator: Permite separar os campos do CSV com ',' ou ";". Se não for informado cria o arquivo separado por ','.
 
+# importante 
+Para serem importadas todas as colunas, é necessário que na linha 01, seja inserido algum valor para cada coluna que deseja importar,
+(pois  para verificar dinamicamente quais celulas são preenchidas, demorariaa demais e ninguém quer isso, correto ?)
 
 
+Minhas redes sociais: 
+twitter: @walterfcarvalho
+inta: /walterfcarvalho
+linkedin: /walterfcarvalho
+
+Se ainda sim tiver dificuldades, manda um wmail para mim em walterfcarvalho@gmail.com ;)
