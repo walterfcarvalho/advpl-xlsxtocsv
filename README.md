@@ -27,6 +27,8 @@ cId: id da planilha no arquivo. Se não for informado, será considerada a prime
 
 cSeparator: Permite separar os campos do CSV com ',' ou ";". Se não for informado cria o arquivo separado por ','.
 
+cSaltos: Indica quantas linhas serão saltadas antes de ler a planilha. Ex se cSaltos = "2", então comecará a ler da linha "3". Ap rimeira linha da planilha é a linha "1".
+
 # importante 
 Para serem importadas todas as colunas, é necessário que na linha 01, seja inserido algum valor para cada coluna que deseja importar,
 (pois  para verificar dinamicamente quais celulas são preenchidas, demorariaa demais e ninguém quer isso, correto ?)
