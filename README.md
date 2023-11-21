@@ -33,10 +33,15 @@ cSaltos: Indica quantas linhas serão saltadas antes de ler a planilha. Ex se cS
 Para serem importadas todas as colunas, é necessário que na linha 01, seja inserido algum valor para cada coluna que deseja importar,
 (pois  para verificar dinamicamente quais celulas são preenchidas, demorariaa demais e ninguém quer isso, correto ?)
 
+# importante 2 - Sobre formato da data.
+Para a sua data ser lida no formato dd/mm/aaaa você deverá formatar o excel a sua data conforme a  figura abaixo.
+
+<img widht="300px" heigth="300px"  src="/images/formatoDataExcel.png">
+Caso contrário você poderá ter datas formatadas de maneiras indesejáveis.
 
 Minhas redes sociais: 
 twitter: @walterfcarvalho
-inta: /walterfcarvalho
+isnta: /walterfcarvalho
 linkedin: /walterfcarvalho
-
+telegram @walterfcarvalho
 Se ainda sim tiver dificuldades, manda um wmail para mim em walterfcarvalho@gmail.com ;)
