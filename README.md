@@ -34,7 +34,7 @@ Para serem importadas todas as colunas, é necessário que na linha 01, seja ins
 (pois  para verificar dinamicamente quais celulas são preenchidas, demorariaa demais e ninguém quer isso, correto ?)
 
 # importante 2 - Sobre formato da data.
-Para a sua data ser lida no formato dd/mm/aaaa você deverá formatar o excel a sua data conforme a  figura abaixo.
+Para a sua data ser lida no formato dd/mm/aaaa, você deverá formatar toda a coluna, no fomato data, conforme a  figura abaixo.
 
 <img widht="300px" heigth="300px"  src="/images/formatoDataExcel.png">
 Caso contrário você poderá ter datas formatadas de maneiras indesejáveis.
